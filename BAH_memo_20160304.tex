@@ -1,0 +1,121 @@
+\documentclass{article}
+
+% TeX packages
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{extramarks}
+\usepackage{chngpage}
+\usepackage{soul,color}
+\usepackage{graphicx,float,wrapfig}
+\usepackage{hanging}
+\usepackage{rotating}
+\usepackage[final]{pdfpages}
+\usepackage{color}
+\usepackage{breqn}
+\usepackage{hyperref,url}
+%\usepackage{indentfirst}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{prediction}{Prediction}
+
+% Homework Specific Information
+\newcommand{\hmwkTitle}{}
+\newcommand{\hmwkDueDate}{\today}
+\newcommand{\hmwkAuthorName}{\textbf{Memorandum to PGP \\From Jon Petkun (\href{mailto:jbpetkun@mit.edu}{\nolinkurl{jbpetkun@mit.edu}})  \newline \newline \emph{Notes on BAH Idea}}}
+
+
+% In case you need to adjust margins:
+\topmargin=-0.5in 
+\evensidemargin=0in     
+\oddsidemargin=0in      
+\textwidth=6.5in        
+\textheight=8.85in       
+\headsep = .85in 
+\footskip = 0.25in
+\parindent = .5in
+
+% Setup the header and footer
+\pagestyle{fancy}                                                       
+\lhead{\hmwkAuthorName}                                                 
+\chead{ \hmwkTitle}  
+\rhead{\hmwkDueDate}                                                     
+\lfoot{\lastxmark}                                                      
+\cfoot{}                                                                
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}}                          
+\renewcommand\headrulewidth{0.4pt}                                      
+\renewcommand\footrulewidth{0.4pt}     
+
+% my personal commands
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\asgood}{\succsim}
+\newcommand{\betterthan}{\succ}
+\newcommand{\indiff}{\thicksim}
+\newcommand{\p}{\prime}
+\newcommand{\hang}{\hangindent3.5em \hangafter=0}
+\newcommand{\gap}{\begin{tabbing} \end{tabbing}}
+\newcommand{\unhang}{\parindent.5in}
+\newcommand{\expect}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\var}[1]{\text{Var}\left(#1\right)}
+\newcommand{\cov}[1]{\text{Cov}\left(#1\right)}
+\newcommand{\prob}[1]{\text{Pr}\left\{#1\right\}}
+\newcommand{\qeq}{\quad = \quad}
+
+
+%%%
+
+\begin{document}
+%%% Comment 1%%%
+
+\newpage
+
+\section{General Thoughts}
+
+At a basic level, what we're trying to identify is the elasticity of local housing prices w.r.t. military housing allowances. One specification we discussed was:
+
+\begin{align}
+\text{avg house price}_{it} = \text{personnel}_{it} \gamma + \text{subsidy}_{it} \beta + \text{subsidy}_{it} \times \text{personnel}_{it} \delta + \epsilon_{it},
+\end{align}
+
+\noindent where $\text{personnel}_{it}$ is the density of military personnel in location $i$ at time $t$. 
+
+I've been thinking more about identification, and I'm a bit concerned that it may be more complicated than we've been thinking. Keep in mind that you know econometrics way better than me, so I could easily be wrong. For concreteness, I'm thinking of a system of three linear equations: 1) housing demand, 2) housing supply, and 3) BAH rates. The system is:
+
+\begin{align}
+& \nonumber \text{housing}^D = \gamma_1 \log(p^h) + \mu_1 \text{subsidy} + \mathbf{z}_{(1)} \boldsymbol{\delta}_{(1)} + u_1 \\
+& \text{housing}^S = \gamma_2 \log(p^h) + \mathbf{z}_{(2)} \boldsymbol{\delta}_{(2)} + u_2 \\
+& \nonumber \text{subsidy} = \gamma_3 \log(p^h) + \mathbf{z}_{(3)} \boldsymbol{\delta}_{(3)} + u_3
+\end{align}
+
+My concerns are two-fold. First, even if we have a demand shifter like exogenous variation in the density of military personnel (e.g. exploiting base closures or unit deployments), I think we need to worry that the demand shifter might not be excluded from the BAH equation. However, imagine we were able to get our hands on the BAH formula, and then the problem reduces to just a two-equation supply and demand system. My second concern is that we're not trying to identify a parameter of supply or demand (like price elasticity), but rather an equilibrium object (i.e. the elasticity of equilibrium housing prices w.r.t. BAH). If that's the case, then do we need a supply shifter in addition to a demand shifter?
+
+To be clear, I suck at this sort of thing, so maybe this isn't a problem. Moreover, I don't think it's completely impossible to imagine getting either more info about the BAH formula or some sort of supply shifter (maybe some sort of Bartik instrument). I think I need to try to derive the reduced form equation from the structural equations to figure out if the identification is really as tricky as I describe, but that'll take me some time, so I thought I'd get your thoughts first.
+
+\section{Data}
+
+A couple of resources that might be helpful:
+
+\subsection{Base Closures}
+\begin{itemize}
+\item \url{http://www.brac.gov/docs/AppendixCFinalUpdated.pdf}
+\begin{itemize}
+\item Lists the final decisions of the 2005 round of BRAC. Specifically, for any base affected by BRAC, it names the base and indicates the net change in military and civilian personnel at that location. The cool thing is that it doesn't just list the bases that are closing or downsizing; it also lists the bases that are gaining members from elsewhere. 
+\end{itemize}
+\end{itemize}
+
+\subsection{Personnel Density}
+\begin{itemize}
+\item \url{http://www.militaryonesource.mil/footer?content_id=279104}
+\begin{itemize}
+\item ``Military Demographic Reports'' from 2003 to 2014. Each report includes a table with the population breakdown of every military installation in the continental U.S. The breakdown separates military personnel from dependents, which might let us infer approximately how many personnel are receiving BAH. The table also has the zip code of each base. Similar to the BRAC closures, I think this might give us another quick and dirty ``proof of concept'' for the overall idea.
+\end{itemize}
+\end{itemize}
+
+
+
+
+\end{document}
+
+
+
