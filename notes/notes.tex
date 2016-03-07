@@ -1,0 +1,77 @@
+
+
+\documentclass{article}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+\section{research question}
+color: \url{http://www.civilbeat.com/2015/06/living-hawaii-how-military-policies-drive-up-rents-on-oahu/} 
+\url{http://www.zillow.com/research/military-home-values-9656/}
+\begin{quote}
+  And later, landlords contemplating raising rents can simply pull up
+  the new housing allowance on an online BAH Calculator to see how
+  much extra money their tenants have been allotted.
+\end{quote}
+\begin{itemize}
+\item What is the impact of military housing policy on housing prices?
+\item How effective are housing subsidies? 
+  \begin{itemize}
+  \item Unintended consequences
+  \item rents captured by landowners
+  \end{itemize}
+\item saliency of subsidies -- why can landlords simply raise rents?
+  This doesn't seem fully rational. However, websites suggest that
+  this is totally the case.
+
+\end{itemize}
+
+
+\section{some googling}
+\begin{itemize}
+\item \url{http://www.seniorsequence.net/old_version/images/student_files/Adelchanow_Jacqueline_Militarys_Effect_on_Housing_Prices_Poster.pdf}
+\item \url{http://hawaiiindependent.net/story/is-hawaiis-military-presence-pricing-local-residents-out-of-the-housing-mar}
+\item \url{https://www.biggerpockets.com/renewsblog/2015/12/16/bah-rates/}
+\item \url{http://www.defensetravel.dod.mil/site/faqbah.cfm#Q3}
+  \begin{quote}
+    Therefore, it is important to watch the rate because its increases AND decreases affect you the landlord. As both a military member and landlord, I have noticed both personally and on different forums I frequent that when BAH rates increase, so do rents. At the same time, when they decrease, you will often find rents will decrease or at a minimum stay the same.
+\end{quote}
+\begin{quote}
+When does the new BAH take place?
+
+The new BAH takes place as of January 1, 2016. Therefore, as long as you have checked into your command by December 31, 2015, you are grandfathered into the previous rate if it decreases. On or after January 1, 2016, you will receive the new rates.
+
+What happens if the rate decreases?
+
+If the rate decreases, you are grandfathered into the current rate. That means that as long as you do not PCS away from the command, you will never receive less BAH than your current amount. If an area has seen substantial decreases in past years, one can find long term service members with much higher rates than incoming service members. This is why it is always important to check the current calculator to prevent making decisions off of an inaccurate rate.
+\end{quote}
+\end{itemize}
+
+\section{Specification}
+
+The BAH subsidy varies susbtantially across MHA locations. They are indexed to zip codes (according to wikipedia). 
+\begin{itemize}
+\item Robert D. Niehaus, Inc. (RDN), a private firm based in California is contracted to provide the data used to calculate BAH allowances.
+\end{itemize}
+Let $i$ define a zip code, and $t$ a year. 
+\begin{equation}
+  \text{avg house price}_{it} = \text{subsidy}_{it}\beta + \epsilon_{it}
+\end{equation}
+
+Since these subsidies are indexed to local house prices, there will be a mechanical effect. Need to exploit variation in density of military personnel. BAH change everywhere, regardless of military personnel presence. However, we expect an impact in places where the personnel is dense:
+
+\begin{equation}
+  \text{avg house price}_{it} = \text{personnel}_{it}\gamma + \text{subsidy}_{it}\beta + \text{subsidy}_{it}\times \text{personnel}_{it} \delta + \epsilon_{it}
+\end{equation}
+
+
+Also, can do another cut: would expect that these effects should show up in inelastic areas, not elastic areas. 
+
+\section{How hard to do?}
+Jon has all the BAH data already. Price data is easy. How hard is it
+to get the personnel? Can we just use the 2000 and 2010 census as an
+approximation? This seemsl ike we could run it in a day.
+
+
+
+\end{document}
