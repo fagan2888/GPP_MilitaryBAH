@@ -1,5 +1,7 @@
 /*Cleaning*/
-use ${location}/output_data/bah_preclean_full.dta, clear
+
+  
+use ../output_data/bah_preclean_full.dta, clear
 foreach v of varlist v* {
 	tab year if `v' == . 
 }
@@ -41,4 +43,4 @@ drop v26-v28
 
 drop _merge*
 
-save ${location}/output_data/bah_clean_full.dta, replace
+save ../output_data/bah_clean_full.dta, replace

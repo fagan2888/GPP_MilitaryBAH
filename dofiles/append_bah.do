@@ -7,17 +7,8 @@ cap log close
 
 
 *Paths*
-if "`c(os)'" == "Unix" {
-   global root = "/san/RDS/Work/fif/b1ked01/Paul"
 
-}
-else if "`c(os)'" == "Windows" {
-   global root = "//rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul"
-}
-
-sysdir set PERSONAL "$root/ados"
-
-global location = "$root/military"
+global location = ".."
 log using ${location}/documentation/append_bah, replace
 log off
 forvalues year = 1998/2016 { 

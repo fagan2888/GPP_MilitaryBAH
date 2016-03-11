@@ -5,37 +5,24 @@ clear *
 macro drop _all
 cap log close 
 
-*Paths*
-if "`c(os)'" == "Unix" {
-   global root = "/san/RDS/Work/fif/b1ked01/Paul"
-
-}
-else if "`c(os)'" == "Windows" {
-   global root = "//rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul"
-}
-
-sysdir set PERSONAL "$root/ados"
-
-global location = "$root/military"
-
-import excel ${location}/input_data/cleaned/demographics_2003.xlsx, firstrow clear
+import excel ../input_data/cleaned/demographics_2003.xlsx, firstrow clear
 
 local vars base branch zip nmc miles_to_nmc sponsors_tot dependents_tot personnel_tot year state
 
 keep `vars'
 
-save ${location}/output_data/demographics_preclean.dta, replace
+save ../output_data/demographics_preclean.dta, replace
 
 forvalues i = 4/14 { 
 	local j: di %02.0f `i'
-	import excel ${location}/input_data/cleaned/demographics_20`j'.xlsx, ///
+	import excel ../input_data/cleaned/demographics_20`j'.xlsx, ///
 		firstrow clear
 	keep `vars'
-	append using ${location}/output_data/demographics_preclean.dta
-	save ${location}/output_data/demographics_preclean.dta, replace
+	append using ../output_data/demographics_preclean.dta
+	save ../output_data/demographics_preclean.dta, replace
 }
 
-use ${location}/output_data/demographics_preclean.dta, clear
+use ../output_data/demographics_preclean.dta, clear
 
 replace base = upper(base)
 foreach var in base nmc { 
@@ -78,4 +65,4 @@ list if inlist(base_clean,15,93,165,201)
 replace base = base[_n-1] if base_clean == base_clean[_n-1]
 drop base_clean
 
-save ${location}/output_data/demographics_clean.dta, replace
+save ../output_data/demographics_clean.dta, replace
