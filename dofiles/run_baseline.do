@@ -39,11 +39,17 @@ merge m:1 zip3 year using `tmp', gen(merge2)
 *keep if year > 2002 & year < 2015
 drop if merge2 == 2
 foreach x of varlist *_tot {
-   replace `x' = 0 if `x' == .
+   replace `x' = 0 if `x' == . & year > 2002 & year < 2015
 }
 
-gen no_mil = personnel_tot == 0
-gen mil = personnel_tot != 0
+gen no_mil = personnel_tot == 0 if personnel_tot != .
+gen mil = personnel_tot != 0 if personnel_tot != .
+
+
+gen mil2003 = mil if year == 2003
+egen mil2003b = max(mil2003), by(zip)
+gen mil_fill = mil
+replace mil_fill = mil2003b if year < 2003
 gen yq =qofd(mdy(month, 1, year))
 tsset zip year
 
@@ -80,7 +86,7 @@ label var mil_bin "Personnel"
 label var dlogincome "dlog(Income)"
 
 gen state2 = substr(id,1,2)
-
+gen mismeasure = state2=="ZZ"
 
 /*
 estimates clear
