@@ -28,7 +28,7 @@ drop _merge
 rename zip zip_code
 
 merge m:1 zip_code year using ../auxiliary_data/incomeDataFilled2011
-drop if year < 2003
+*drop if year < 2003
 keep if _merge == 1 | _merge == 3
 drop _merge
 rename zip_code zip
@@ -36,16 +36,16 @@ rename zip_code zip
 gen zip3 = floor(zip/100)
 gen zip4 = floor(zip/10)
 merge m:1 zip3 year using `tmp', gen(merge2)
-keep if year > 2002 & year < 2015
+*keep if year > 2002 & year < 2015
 drop if merge2 == 2
 foreach x of varlist *_tot {
    replace `x' = 0 if `x' == .
 }
 
-gen no_mil = sponsors_tot == 0
-gen mil = sponsors_tot != 0
+gen no_mil = personnel_tot == 0
+gen mil = personnel_tot != 0
 gen yq =qofd(mdy(month, 1, year))
-tsset zip yq
+tsset zip year
 
 gen loghpi = log(hpi_all)
 gen logbah = log(bah)
@@ -55,13 +55,13 @@ gen logincome = log(income_soi_ipolate)
 *gen init_logbah = logbah  if year == 2003
 *egen init = max(init_logbah), by(zip)
 
-gen dloghpi = S4.loghpi
-gen dlogbah = S4.logbah
-gen dlogincome = S4.logincome
+gen dloghpi = D.loghpi
+gen dlogbah = D.logbah
+gen dlogincome = D.logincome
 
-gen dhpi = S4.hpi_all
+gen dhpi = D.hpi_all
 
-gen dbah = S4.bah
+gen dbah = D.bah
 
 egen num_zip3 = total(num_returns_ipolate), by(yq zip3)
 replace num_zip3 = . if num_zip == 0
