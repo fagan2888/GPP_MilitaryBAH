@@ -1,0 +1,10 @@
+This file describes how the "United States Installation Population by State" reference tables were downloaded to Excel and appended/cleaned in STATA.
+
+Access to the files is available at http://www.militaryonesource.mil/footer?content_id=279104 for the years 2003-2014. These original files are located in Paul/military/input_data/pdfs. Beginning with 2014:
+
+1. Download PDF to Paul/military/input_data/2014-Demographics-Report.pdf
+2. Used Adobe Acrobat to convert each PDF file to an XLSX file to use in Excel. For 2014 and 2003, there were some significant formatting issues that I fixed by hand. I also had to edit the data to create a column for the state (and year of the dataset) in which the base is located. 
+3. For years before 2010, the branch of the respective base was not listed, so I used the more recent datasets to fill in the branch for the older data. During this process, I noticed that there were small changes in the names of the base between datasets (e.g., spelling mistakes, abbreviations) that I normalized as best as I could. Within STATA, I further normalized using string-matching (strgroup). 
+4. Some bases only appeared in certain years. 
+
+5. The program "dofiles/append_demos.do" appends these xlsx files together. After appending, I string-matched the base names using the strgroup command (Levenshtein distance). See program file for details. Final data is saved in "output_data/demographics_clean.dta". 

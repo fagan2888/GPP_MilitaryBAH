@@ -1,4 +1,5 @@
 
 *.tex~
-
+bah_preclean_full.dta
+bah_clean_full.dta
 *.aux

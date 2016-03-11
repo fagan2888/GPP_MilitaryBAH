@@ -1,0 +1,169 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}//rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/documentation/append_bah.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 9 Mar 2016, 17:41:17
+{txt}
+{com}. log off
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}//rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/documentation/append_bah.smcl
+  {txt}log type:  {res}smcl
+ {txt}paused on:  {res} 9 Mar 2016, 17:41:17
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}//rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/documentation/append_bah.smcl
+  {txt}log type:  {res}smcl
+{txt}resumed on:  {res} 9 Mar 2016, 17:41:22
+{txt}
+{com}. forvalues year = 1998/2016 {c -(} 
+{txt}  2{com}.         if `year' < 2000 {c -(} 
+{txt}  3{com}.                 local i = `year' - 1900 
+{txt}  4{com}.         {c )-}
+{txt}  5{com}.         else if `year' >= 2000 {c -(} 
+{txt}  6{com}.                 local i = `year' - 2000
+{txt}  7{com}.                 local i: di %02.0f `i'
+{txt}  8{com}.         {c )-}
+{txt}  9{com}.         import delimited ${c -(}location{c )-}/input_data/txt/`year'BAH/sorted_zipmha`i'.txt, delimiter(space) clear
+{txt} 10{com}.         cap drop v3
+{txt} 11{com}.         rename v2 id
+{txt} 12{com}.         rename v1 zip
+{txt} 13{com}.         di `year'
+{txt} 14{com}.         joinby id using ${c -(}location{c )-}/output_data/bah_preclean_`i'.dta, _merge(_mergezip`i')
+{txt} 15{com}.         save ${c -(}location{c )-}/output_data/bah_preclean_`i'.dta, replace
+{txt} 16{com}.         
+.         import delimited ${c -(}location{c )-}/input_data/txt/`year'BAH/mhanames`i'.txt, delimiter(";") clear
+{txt} 17{com}.         cap drop v3
+{txt} 18{com}.         rename v1 id
+{txt} 19{com}.         rename v2 city
+{txt} 20{com}.         di `year'
+{txt} 21{com}.         joinby id using ${c -(}location{c )-}/output_data/bah_preclean_`i'.dta, _merge(_mergecity`i')
+{txt} 22{com}.         save ${c -(}location{c )-}/output_data/bah_preclean_`i'.dta, replace
+{txt} 23{com}. 
+. {c )-}
+{res}{text}(2 vars, 45309 obs)
+{res}1998
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_98.dta saved
+{res}{text}(3 vars, 425 obs)
+{res}1998
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_98.dta saved
+{res}{text}(3 vars, 45393 obs)
+{res}1999
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_99.dta saved
+{res}{text}(2 vars, 426 obs)
+{res}1999
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_99.dta saved
+{res}{text}(2 vars, 45440 obs)
+{res}2000
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_00.dta saved
+{res}{text}(2 vars, 411 obs)
+{res}2000
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_00.dta saved
+{res}{text}(2 vars, 45496 obs)
+{res}2001
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_01.dta saved
+{res}{text}(2 vars, 407 obs)
+{res}2001
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_01.dta saved
+{res}{text}(2 vars, 45498 obs)
+{res}2002
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_02.dta saved
+{res}{text}(2 vars, 401 obs)
+{res}2002
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_02.dta saved
+{res}{text}(3 vars, 45585 obs)
+{res}2003
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_03.dta saved
+{res}{text}(2 vars, 408 obs)
+{res}2003
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_03.dta saved
+{res}{text}(2 vars, 45611 obs)
+{res}2004
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_04.dta saved
+{res}{text}(2 vars, 408 obs)
+{res}2004
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_04.dta saved
+{res}{text}(2 vars, 45644 obs)
+{res}2005
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_05.dta saved
+{res}{text}(2 vars, 409 obs)
+{res}2005
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_05.dta saved
+{res}{text}(2 vars, 45692 obs)
+{res}2006
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_06.dta saved
+{res}{text}(2 vars, 405 obs)
+{res}2006
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_06.dta saved
+{res}{text}(2 vars, 46267 obs)
+{res}2007
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_07.dta saved
+{res}{text}(2 vars, 409 obs)
+{res}2007
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_07.dta saved
+{res}{text}(2 vars, 45794 obs)
+{res}2008
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_08.dta saved
+{res}{text}(2 vars, 408 obs)
+{res}2008
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_08.dta saved
+{res}{text}(2 vars, 41572 obs)
+{res}2009
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_09.dta saved
+{res}{text}(2 vars, 403 obs)
+{res}2009
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_09.dta saved
+{res}{text}(2 vars, 41809 obs)
+{res}2010
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_10.dta saved
+{res}{text}(2 vars, 403 obs)
+{res}2010
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_10.dta saved
+{res}{text}(2 vars, 41710 obs)
+{res}2011
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_11.dta saved
+{res}{text}(2 vars, 403 obs)
+{res}2011
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_11.dta saved
+{res}{text}(2 vars, 41347 obs)
+{res}2012
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_12.dta saved
+{res}{text}(2 vars, 404 obs)
+{res}2012
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_12.dta saved
+{res}{text}(2 vars, 41280 obs)
+{res}2013
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_13.dta saved
+{res}{text}(2 vars, 399 obs)
+{res}2013
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_13.dta saved
+{res}{text}(2 vars, 41267 obs)
+{res}2014
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_14.dta saved
+{res}{text}(2 vars, 346 obs)
+{res}2014
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_14.dta saved
+{res}{text}(2 vars, 41244 obs)
+{res}2015
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_15.dta saved
+{res}{text}(2 vars, 346 obs)
+{res}2015
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_15.dta saved
+{res}{text}(2 vars, 41039 obs)
+{res}2016
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_16.dta saved
+{res}{text}(2 vars, 344 obs)
+{res}2016
+{txt}file //rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/output_data/bah_preclean_16.dta saved
+
+{com}. log off
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}//rb/b1/NYRESAN/RDS/Work/fif/b1ked01/Paul/military/documentation/append_bah.smcl
+  {txt}log type:  {res}smcl
+ {txt}paused on:  {res} 9 Mar 2016, 17:42:16
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

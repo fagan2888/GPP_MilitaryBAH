@@ -1,0 +1,7 @@
+This file describes how the BAH military payscale data were downloaded as text files as cleaned/appended in STATA. 
+
+Access to the files is available at http://www.defensetravel.dod.mil/site/pdcFiles.cfm?dir=/Allowances/BAH/ASCII/. These original files are located in Paul/military/input_data/txt. 
+
+1. I imported the text files directly into STATA (see "dofiles/append_bah.do") and appended together the files for the same year with and without dependents (w=0=without, w=1=with), creating files by year (e.g., bah_preclean_98). 
+2. Next, I merged these files with the zip code and city crosswalks provided in the original files (e.g., sorted_zipmha98, mhanames98), then appended years 1999-2016 together (see program). Note that I kept a log file of these merges, because it seemed that some years had more superfluous crosswalks than others--I can look into this more. 
+3. I then cleaned this data in "dofiles/clean_bah.do". Final data is saved in "output_data/bah_clean_full.dta".

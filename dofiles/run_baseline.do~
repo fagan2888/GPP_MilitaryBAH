@@ -1,0 +1,144 @@
+
+
+use ../data/clean/demographics_clean, clear
+gen zip3 = floor(zip/ 100)
+gen zip4 = floor(zip/ 10)
+collapse (sum) *_tot (mean) miles_to_nmc, by(year zip3)
+tempfile tmp
+save `tmp', 
+
+use ../data/clean/bah_clean_full, clear
+drop v3-v25
+keep if w == 1
+rename v2 bah
+rename zip regionname
+merge 1:m regionname year using ../data/clean/zillow_zip_quarterly
+keep if year > 1998 & year < 2016
+
+/*** FIgure out why missing zip code prices ***/
+keep if _merge == 3
+rename regionname zip
+drop _merge 
+rename zip zip_code
+
+merge m:1 zip_code year using ../data/clean/incomeDataFilled2011
+drop if year < 2003
+keep if _merge == 1 | _merge == 3
+drop _merge
+rename zip_code zip
+
+gen zip3 = floor(zip/100)
+gen zip4 = floor(zip/10)
+merge m:1 zip3 year using `tmp', gen(merge2)
+keep if year > 2002 & year < 2015
+drop if merge2 == 2
+foreach x of varlist *_tot {
+   replace `x' = 0 if `x' == .
+}
+
+gen no_mil = sponsors_tot == 0
+gen mil = sponsors_tot != 0
+gen yq =qofd(mdy(month, 1, year))
+tsset zip yq
+
+gen loghpi = log(hpi_all)
+gen logbah = log(bah)
+gen logincome = log(income_soi_ipolate)
+
+
+gen init_logbah = logbah  if year == 2003
+egen init = max(init_logbah), by(zip)
+
+gen dloghpi = S4.loghpi
+gen dlogbah = S4.logbah
+gen dlogincome = S4.logincome
+
+gen dhpi = S4.hpi_all
+
+gen dbah = S4.bah
+
+egen num_zip3 = total(num_returns_ipolate), by(yq zip3)
+replace num_zip3 = . if num_zip == 0
+gen frac = personnel_tot / num_zip3
+replace frac = . if frac > 1
+fastxtile mil_bin = frac if frac > 0, n(5)
+replace mil_bin = 0 if mil_bin == .
+
+gen mil_dlogbah = mil * dlogbah
+label var mil_dlogbah "dlog(BAH) X Military Base"
+label var dlogbah "dlog(BAH)"
+label var dloghpi "dlog(HPI)"
+label var mil "Military Base"
+label var mil_bin "Personnel"
+label var dlogincome "dlog(Income)"
+
+estimates clear
+eststo: reg dloghpi dlogbah mil mil_dlogbah i.yq, cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: reg dloghpi dlogbah mil mil_dlogbah i.yq if dlogincome != ., cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: reg dloghpi dlogbah mil mil_dlogbah i.yq dlogincome, cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: areg dloghpi dlogbah mil mil_dlogbah i.yq, cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+eststo: areg dloghpi dlogbah mil mil_dlogbah i.yq if dlogincome != ., cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+eststo: areg dloghpi dlogbah mil mil_dlogbah i.yq dlogincome, cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+log using ../results/results.log, replace
+esttab, keep(dlogbah mil mil_dlogbah dlogincome) scalar("date_fe Year FE?"  "zip_fe Zip FE?" ) obslast star(* 0.1  ** .05  *** 0.01) nonotes r2(%9.3f) nogap  b(%9.3f) se(%9.3f) label
+log off
+
+estimates clear
+eststo: reg dloghpi c.dlogbah##i.mil_bin i.yq, cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: reg dloghpi c.dlogbah##i.mil_bin i.yq if dlogincome != ., cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: reg dloghpi c.dlogbah##i.mil_bin i.yq dlogincome, cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: areg dloghpi c.dlogbah##i.mil_bin i.yq, cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+eststo: areg dloghpi c.dlogbah##i.mil_bin i.yq if dlogincome != ., cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+eststo: areg dloghpi c.dlogbah##i.mil_bin i.yq dlogincome, cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+log on
+esttab, keep(dlogbah 1.mil_bin 2.mil_bin 3.mil_bin 4.mil_bin 5.mil_bin 1.mil_bin#c.dlogbah 2.mil_bin#c.dlogbah 3.mil_bin#c.dlogbah 4.mil_bin#c.dlogbah 5.mil_bin#c.dlogbah dlogincome) scalar("date_fe Year FE?"  "zip_fe Zip FE?" ) obslast star(* 0.1  ** .05  *** 0.01) nonotes r2(%9.3f) nogap  b(%9.3f) se(%9.3f) label
+log off
+
+preserve
+drop if mil_bin == 5
+estimates clear
+eststo: reg dloghpi c.dlogbah##i.mil_bin i.yq, cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: reg dloghpi c.dlogbah##i.mil_bin i.yq if dlogincome != ., cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: reg dloghpi c.dlogbah##i.mil_bin i.yq dlogincome, cluster(state)
+estadd local date_fe = "Y"
+estadd local zip_fe = "N"
+eststo: areg dloghpi c.dlogbah##i.mil_bin i.yq, cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+eststo: areg dloghpi c.dlogbah##i.mil_bin i.yq if dlogincome != ., cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+eststo: areg dloghpi c.dlogbah##i.mil_bin i.yq dlogincome, cluster(state) absorb(zip)
+estadd local date_fe = "Y"
+estadd local zip_fe = "Y"
+log on
+esttab, keep(dlogbah 1.mil_bin 2.mil_bin 3.mil_bin 4.mil_bin 1.mil_bin#c.dlogbah 2.mil_bin#c.dlogbah 3.mil_bin#c.dlogbah 4.mil_bin#c.dlogbah  dlogincome) scalar("date_fe Year FE?"  "zip_fe Zip FE?" ) obslast star(* 0.1  ** .05  *** 0.01) nonotes r2(%9.3f) nogap  b(%9.3f) se(%9.3f) label
+log close
