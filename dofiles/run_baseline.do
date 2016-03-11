@@ -12,11 +12,17 @@ drop v3-v25
 keep if w == 1
 rename v2 bah
 rename zip regionname
-merge 1:m regionname year using ../auxiliary_data/zillow_zip_quarterly
+preserve
+use ../auxiliary_data/zillow_zip_quarterly, clear
+keep if month == 6
+tempfile tmp2
+save `tmp2'
+restore
+merge 1:1 regionname year using `tmp2'
 keep if year > 1998 & year < 2016
 
 /*** FIgure out why missing zip code prices ***/
-keep if _merge == 3
+keep if _merge == 3 | _merge == 1
 rename regionname zip
 drop _merge 
 rename zip zip_code
@@ -46,8 +52,8 @@ gen logbah = log(bah)
 gen logincome = log(income_soi_ipolate)
 
 
-gen init_logbah = logbah  if year == 2003
-egen init = max(init_logbah), by(zip)
+*gen init_logbah = logbah  if year == 2003
+*egen init = max(init_logbah), by(zip)
 
 gen dloghpi = S4.loghpi
 gen dlogbah = S4.logbah
@@ -61,6 +67,7 @@ egen num_zip3 = total(num_returns_ipolate), by(yq zip3)
 replace num_zip3 = . if num_zip == 0
 gen frac = personnel_tot / num_zip3
 replace frac = . if frac > 1
+gen frac_sq = frac^2
 fastxtile mil_bin = frac if frac > 0, n(5)
 replace mil_bin = 0 if mil_bin == .
 
@@ -72,6 +79,10 @@ label var mil "Military Base"
 label var mil_bin "Personnel"
 label var dlogincome "dlog(Income)"
 
+gen state2 = substr(id,1,2)
+
+
+/*
 estimates clear
 eststo: reg dloghpi dlogbah mil mil_dlogbah i.yq, cluster(state)
 estadd local date_fe = "Y"
